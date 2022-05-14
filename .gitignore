@@ -1,0 +1,6 @@
+# Project exclude paths
+/cmake-build-debug/
+/CMakeLists.txt
+/.idea/modules.xml
+/.idea/Tic_tac_toe.iml
+/.idea/vcs.xml

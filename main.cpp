@@ -2,6 +2,8 @@
 
 using namespace std;
 
+#define CHARSIZE 128
+
 class Vector {
 
     int size;
@@ -45,10 +47,6 @@ public:
         }
     }
 
-    void swapV(int a, int b){
-        swap(arr[a], arr[b]);
-    }
-
     int getSize(){
         return size;
     }
@@ -83,6 +81,7 @@ public:
         for (int i=0; i<x*y; i++){
             if (board[i] == 0) {
                 board[i] = player;
+                if (full()) { cout << 0 << endl; return; }
                 save();
                 board[i] = 0;
                 moves++;
@@ -95,6 +94,14 @@ public:
         for (int i=0; i<x*y; i++){
             possibleMoves->add(board[i]);
         }
+    }
+
+    bool full(){
+        int result = 1;
+        for (int i=0; i<x*y; i++){
+            result *= board[i];
+        }
+        return result;
     }
 
     void print(){
@@ -112,23 +119,51 @@ public:
 
 };
 
+bool compare(char *first, const char second[]);
+void read(char command[CHARSIZE]);
 void inputBoard(int size, TicTacToe* g);
 
-int main() {
-    int x, y, player;
-    cin >> x >> y;
-    TicTacToe* game = new TicTacToe(x, y);
-    inputBoard( x*y, game);
-    cin >> player;
-    game->generatePossibleMoves(player);
-    //game->print();
+int main()
+{
+    char command[CHARSIZE];
+    while(cin >> command)
+    {
+        read(command);
+    }
     return 0;
 }
 
-void inputBoard(int size, TicTacToe* g){
+void inputBoard(int size, TicTacToe* g)
+{
     int player;
     for (int i=0; i < size; i++){
         cin >> player;
         g->setTheBoard(i, player);
     }
+}
+
+void read(char command[CHARSIZE])
+{
+    TicTacToe* game;
+    int x, y, k, player;
+    if (compare(command, "GEN_ALL_POS_MOV"))
+    {
+        cin >> x >> y >> k >> player;
+        game = new TicTacToe(x, y);
+        inputBoard( x*y, game);
+        game->generatePossibleMoves(player);
+    }
+}
+
+bool compare(char *first, const char second[])
+{
+    for (int j = 0; j < CHARSIZE; j++) {
+        if (first[j] == '\0') {
+            return true;
+        }
+        if (first[j] != second[j]) {
+            return false;
+        }
+    }
+    return true;
 }
